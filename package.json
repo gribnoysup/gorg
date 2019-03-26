@@ -1,0 +1,21 @@
+{
+  "name": "gorg",
+  "version": "1.0.0",
+  "description": "Gorg – Gorgeous Game Engine",
+  "main": "index.js",
+  "scripts": {
+    "start": "browser-sync \"example\" \"dist\" \"src\" --watch --no-ui --logLevel=silent",
+    "build": "tsc",
+    "build:watch": "npm run build -- -w",
+    "watch": "start-server-and-test :3000 build:watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Sergey Petushkov <petushkov.sergey@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.26.3",
+    "start-server-and-test": "^1.7.12",
+    "typescript": "^3.3.4000"
+  }
+}
