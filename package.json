@@ -4,7 +4,7 @@
   "description": "Gorg – Gorgeous Game Engine",
   "main": "index.js",
   "scripts": {
-    "start": "browser-sync \"example\" \"dist\" \"src\" --watch --no-ui --logLevel=silent",
+    "start": "mkdir -p dist && browser-sync \"example\" \"dist\" --watch --no-ui --logLevel=silent",
     "build": "tsc",
     "build:watch": "npm run build -- -w",
     "watch": "start-server-and-test :3000 build:watch",
