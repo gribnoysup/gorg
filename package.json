@@ -1,21 +1,33 @@
 {
   "name": "gorg",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Gorg – Gorgeous Game Engine",
-  "main": "index.js",
+  "main": "dist/gorg.js",
+  "umd:main": "dist/gorg.umd.production.js",
+  "module": "dist/gorg.es.production.js",
+  "typings": "dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "mkdir -p dist && browser-sync \"example\" \"dist\" --watch --no-ui --logLevel=silent",
-    "build": "tsc",
-    "build:watch": "npm run build -- -w",
-    "watch": "start-server-and-test :3000 build:watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsc": "tsc",
+    "tsc:watch": "npm run tsc -- -w",
+    "microbundle": "microbundle",
+    "microbundle:watch": "npm run microbundle -- --watch",
+    "watch": "start-server-and-test :3000 microbundle:watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run microbundle"
   },
   "keywords": [],
   "author": "Sergey Petushkov <petushkov.sergey@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "browser-sync": "^2.26.3",
+    "acorn": "^6.1.1",
+    "browser-sync": "^2.26.5",
+    "microbundle": "^0.11.0",
     "start-server-and-test": "^1.7.12",
-    "typescript": "^3.3.4000"
+    "tslib": "^1.9.3",
+    "typescript": "^3.4.5"
   }
 }

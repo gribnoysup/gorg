@@ -1,5 +1,5 @@
-import { IGameObject, IWorld } from './types.js';
-import { OrthographicCamera } from './game-objects.js';
+import { IGameObject, IWorld } from './types';
+import { OrthographicCamera } from './game-objects';
 
 export class Scene {
   name: string;
@@ -14,8 +14,8 @@ export class Scene {
     return this.gameObjects.filter(obj => obj.disabled === false);
   }
 
-  addObject(gameObject: IGameObject) {
-    this.gameObjects.push(gameObject);
+  addObjects(gameObjects: IGameObject | IGameObject[]) {
+    this.gameObjects = this.gameObjects.concat(gameObjects);
   }
 
   update(world: IWorld, deltaTime: number) {

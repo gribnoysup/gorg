@@ -1,27 +1,22 @@
 import {
   IRenderComponent,
-  IScene,
   IWorld,
-  IGameObject,
-  IOrthographicCamera,
   CanvasFillStrokeStyles,
-} from '../../core/types.js';
-
-import { angle } from '../../core/vector2d.js';
+} from '../../core/types';
 
 export class RectRenderer implements IRenderComponent {
   width: number;
   height: number;
-  fillStyle: CanvasFillStrokeStyles;
-  strokeStyle: CanvasFillStrokeStyles;
+  fillStyle: CanvasFillStrokeStyles | null;
+  strokeStyle: CanvasFillStrokeStyles | null;
   lineWidth: number;
 
   constructor(
     width: number,
     height: number,
-    fillStyle: CanvasFillStrokeStyles = null,
-    strokeStyle: CanvasFillStrokeStyles = null,
-    lineWidth: number
+    fillStyle: CanvasFillStrokeStyles | null = null,
+    strokeStyle: CanvasFillStrokeStyles | null = null,
+    lineWidth: number = 1
   ) {
     this.width = width;
     this.height = height;
@@ -30,24 +25,11 @@ export class RectRenderer implements IRenderComponent {
     this.lineWidth = lineWidth;
   }
 
-  render(
-    world: IWorld,
-    scene: IScene,
-    gameObject: IGameObject,
-    camera: IOrthographicCamera,
-    remainder: number
-  ) {
+  render(world: IWorld) {
     const { renderer } = world;
-    const { position, rotation, scale } = gameObject.components.transform;
 
     const centerX = this.width / 2;
     const centerY = this.height / 2;
-
-    renderer.context.strokeStyle = this.strokeStyle;
-
-    renderer.context.translate(...position);
-    renderer.context.rotate(angle(rotation));
-    renderer.context.scale(...scale);
 
     if (this.fillStyle) {
       renderer.context.fillStyle = this.fillStyle;

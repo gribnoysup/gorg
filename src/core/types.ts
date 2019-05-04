@@ -10,7 +10,7 @@ export type Rectangle = {
 export type CanvasFillStrokeStyles = string | CanvasGradient | CanvasPattern;
 
 export interface IStateComponent<K = any, V = any> {
-  get(key: K): V;
+  get(key: K): V | undefined;
   set(key: K, value: V): IStateComponent<K, V>;
 }
 
@@ -18,6 +18,7 @@ export interface ITransformComponent {
   position: Vector2d;
   rotation: Vector2d;
   scale: Vector2d;
+  adjustRendererContext(renderer: ICanvas2DRenderer): void;
 }
 
 export interface IRenderComponent {
@@ -68,7 +69,7 @@ export interface IScene {
   name: string;
   gameObjects: IGameObject[];
   getActiveObjects(): IGameObject[];
-  addObject(gameObject: IGameObject): void;
+  addObjects(gameObjects: IGameObject | IGameObject[]): void;
   update(world: IWorld, deltaTime: number): void;
   render(world: IWorld, remainder: number): void;
 }
@@ -84,12 +85,12 @@ export interface IRuntimeFrameTimestamps {
 export interface ICanvas2DRenderer {
   view: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
-  currentCamera: IOrthographicCamera;
+  currentCamera: IOrthographicCamera | null;
   appendTo(element: HTMLElement): void;
   setCurrentCamera(camera: IOrthographicCamera): void;
   prepareCanvas(): void;
   restoreCanvas(): void;
-  draw(cb: Function): void;
+  draw(cb: () => void): void;
 }
 
 export interface IWorld {

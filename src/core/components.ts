@@ -1,17 +1,21 @@
-import { Vector2d, IStateComponent, ITransformComponent } from './types.js';
+import { Vector2d, ITransformComponent, ICanvas2DRenderer } from './types';
+
 import {
   add,
   angleToVector,
   angleDegToVector,
   rotate,
   rotateDeg,
-} from './vector2d.js';
+  angle,
+} from './vector2d';
+
+const StateComponent = Map;
 
 /**
  * Key value storage component for GameObject to share
  * state across components
  */
-export class StateComponent extends Map implements IStateComponent<any, any> {}
+export { StateComponent };
 
 /**
  * Component that keeps GameObject position, rotation
@@ -63,6 +67,14 @@ export class TransformComponent implements ITransformComponent {
   scaleBy(vec: Vector2d) {
     this.scale = add(this.scale, vec);
   }
+
+  adjustRendererContext(renderer: ICanvas2DRenderer) {
+    const { position, rotation, scale } = this;
+
+    renderer.context.translate(...position);
+    renderer.context.rotate(angle(rotation));
+    renderer.context.scale(...scale);
+  }
 }
 
-export { IUpdateComponent, IRenderComponent } from './types.js';
+export { IUpdateComponent, IRenderComponent } from './types';

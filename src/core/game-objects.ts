@@ -6,9 +6,9 @@ import {
   IScene,
   Rectangle,
   CanvasFillStrokeStyles,
-} from './types.js';
+} from './types';
 
-import { StateComponent, TransformComponent } from './components.js';
+import { StateComponent, TransformComponent } from './components';
 
 export class GameObject implements IGameObject {
   name: string;
@@ -76,6 +76,7 @@ export class OrthographicCamera extends GameObject
         // viewport / renderer working area before
         // calling `render`
         world.renderer.draw(() => {
+          gameObject.components.transform.adjustRendererContext(world.renderer);
           gameObject.render(world, scene, camera, remainder);
         });
       }

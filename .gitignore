@@ -2,3 +2,9 @@ node_modules
 dist
 src/**/*.js
 src/**/*.js.map
+src/**/*.d.ts
+dist
+# rollup plugin typescript2 cache folders 🙄
+.rts2_cache_cjs
+.rts2_cache_es
+.rts2_cache_umd

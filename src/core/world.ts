@@ -7,9 +7,9 @@ import {
   Vector2d,
   Rectangle,
   CanvasFillStrokeStyles,
-} from './types.js';
+} from './types';
 
-import { add, multiply, subtract, angle } from './vector2d.js';
+import { add, multiply, subtract, angle } from './vector2d';
 
 /**
  * Returns high res time in ms
@@ -21,13 +21,20 @@ function now() {
 export class Canvas2DRenderer implements ICanvas2DRenderer {
   view: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
-  currentCamera: IOrthographicCamera;
+  currentCamera: IOrthographicCamera | null;
 
   constructor(width: number, height: number) {
     this.view = document.createElement('canvas');
     this.view.width = width;
     this.view.height = height;
-    this.context = this.view.getContext('2d');
+
+    const context = this.view.getContext('2d');
+
+    if (context == null) {
+      throw new Error('Context not found on DOM element');
+    }
+
+    this.context = context;
     this.currentCamera = null;
   }
 
@@ -59,6 +66,8 @@ export class Canvas2DRenderer implements ICanvas2DRenderer {
   }
 
   prepareCanvas() {
+    if (this.currentCamera == null) return;
+
     this.context.save();
     this.clipCameraViewport();
     this.clear();
@@ -70,6 +79,8 @@ export class Canvas2DRenderer implements ICanvas2DRenderer {
   }
 
   private clipCameraViewport() {
+    if (this.currentCamera == null) return;
+
     const { x, y, w, h } = this.getPixelsRectInViewport(
       this.currentCamera.viewportRect
     );
@@ -79,6 +90,8 @@ export class Canvas2DRenderer implements ICanvas2DRenderer {
   }
 
   private adjustContextToCamera() {
+    if (this.currentCamera == null) return;
+
     const {
       position,
       rotation,
@@ -156,7 +169,7 @@ export class World implements IWorld {
   renderer: ICanvas2DRenderer;
 
   constructor(
-    scenes: IScene[],
+    scenes: IScene[] = [],
     fps: number = 30,
     width: number = 320,
     height: number = 240
@@ -171,6 +184,16 @@ export class World implements IWorld {
     this.update = this.update.bind(this);
     this.safeUpdate = this.safeUpdate.bind(this);
     this.renderer = new Canvas2DRenderer(width, height);
+  }
+
+  addScenes(scenes: IScene | IScene[]) {
+    if (Array.isArray(scenes)) {
+      scenes.forEach(scene => {
+        this.scenes.set(scene.name, scene);
+      });
+    } else {
+      this.scenes.set(scenes.name, scenes);
+    }
   }
 
   setActiveScene(sceneName: string) {
@@ -204,8 +227,13 @@ export class World implements IWorld {
   }
 
   private update() {
-    const activeScene = this.scenes.get(this.activeScene);
-    const { timestamps: t, deltaTime } = this;
+    const { timestamps: t, deltaTime, scenes, activeScene } = this;
+
+    if (activeScene == null) return;
+
+    const scene = scenes.get(activeScene);
+
+    if (scene == null) return;
 
     t.currentUpdateTime = now();
     t.elapsedUpdateTime = t.currentUpdateTime - t.previousUpdateTime;
@@ -213,14 +241,17 @@ export class World implements IWorld {
     t.updateLag += t.elapsedUpdateTime;
 
     while (t.updateLag >= deltaTime) {
-      activeScene.update(this, deltaTime);
+      scene.update(this, deltaTime);
       t.updateLag -= deltaTime;
     }
 
-    activeScene.render(this, t.updateLag / deltaTime);
+    scene.render(this, t.updateLag / deltaTime);
   }
 
   stop() {
-    window.cancelAnimationFrame(this.animationFrame);
+    if (this.animationFrame) {
+      window.cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = null;
+    }
   }
 }
