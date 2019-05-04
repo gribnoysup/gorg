@@ -1,6 +1,6 @@
 {
   "name": "gorg",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Gorg – Gorgeous Game Engine",
   "main": "dist/gorg.js",
   "umd:main": "dist/gorg.umd.production.js",
@@ -17,7 +17,7 @@
     "microbundle:watch": "npm run microbundle -- --watch",
     "watch": "start-server-and-test :3000 microbundle:watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run microbundle"
+    "build": "rm -rf dist && npm run microbundle"
   },
   "keywords": [],
   "author": "Sergey Petushkov <petushkov.sergey@gmail.com>",
