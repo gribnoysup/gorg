@@ -7,7 +7,7 @@ import {
   rotate,
   rotateDeg,
   angle,
-} from './vector2d';
+} from './Vector2d';
 
 const StateComponent = Map;
 

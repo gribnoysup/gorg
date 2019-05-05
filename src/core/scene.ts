@@ -1,5 +1,5 @@
 import { IGameObject, IWorld } from './types';
-import { OrthographicCamera } from './game-objects';
+import { OrthographicCamera } from './OrthographicCamera';
 
 export class Scene {
   name: string;

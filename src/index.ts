@@ -1,9 +1,10 @@
-export { World } from './core/world';
-export { Scene } from './core/scene';
-export { GameObject, OrthographicCamera } from './core/game-objects';
+export { World } from './core/World';
+export { Scene } from './core/Scene';
+export { GameObject } from './core/GameObject';
+export { OrthographicCamera } from './core/OrthographicCamera';
 export { TransformComponent, StateComponent } from './core/components';
 
-import * as Vector2d from './core/vector2d';
+import * as Vector2d from './core/Vector2d';
 
 import { RectRendererComponent } from './addons/components/RectRendererComponent';
 

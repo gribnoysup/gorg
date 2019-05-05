@@ -9,7 +9,7 @@ import {
   CanvasFillStrokeStyles,
 } from './types';
 
-import { add, multiply, subtract, angle } from './vector2d';
+import { add, multiply, subtract, angle } from './Vector2d';
 
 /**
  * Returns high res time in ms
