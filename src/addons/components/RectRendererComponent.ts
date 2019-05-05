@@ -4,7 +4,7 @@ import {
   CanvasFillStrokeStyles,
 } from '../../core/types';
 
-export class RectRenderer implements IRenderComponent {
+export class RectRendererComponent implements IRenderComponent {
   width: number;
   height: number;
   fillStyle: CanvasFillStrokeStyles | null;

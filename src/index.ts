@@ -5,4 +5,12 @@ export { TransformComponent, StateComponent } from './core/components';
 
 import * as Vector2d from './core/vector2d';
 
-export { Vector2d };
+import { RectRendererComponent } from './addons/components/RectRendererComponent';
+
+const addons = {
+  components: {
+    RectRendererComponent,
+  },
+};
+
+export { Vector2d, addons };
