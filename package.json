@@ -1,6 +1,6 @@
 {
   "name": "gorg",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Gorg – Gorgeous Game Engine",
   "main": "dist/gorg.js",
   "umd:main": "dist/gorg.umd.js",
