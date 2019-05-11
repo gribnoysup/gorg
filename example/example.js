@@ -10,6 +10,7 @@ const {
   TransformComponent,
   Vector2d,
   addons,
+  utils,
 } = Gorg;
 
 class RotateUpdater {

@@ -4,7 +4,7 @@ import {
   IOrthographicCamera,
   IWorld,
   IScene,
-} from './types';
+} from '../types';
 
 import { StateComponent, TransformComponent } from './components';
 

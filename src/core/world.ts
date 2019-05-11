@@ -7,16 +7,11 @@ import {
   Vector2d,
   Rectangle,
   CanvasFillStrokeStyles,
-} from './types';
+} from '../types';
+
+import { now } from '../utils';
 
 import { add, multiply, subtract, angle } from './Vector2d';
-
-/**
- * Returns high res time in ms
- */
-function now() {
-  return performance.now();
-}
 
 export class Canvas2DRenderer implements ICanvas2DRenderer {
   view: HTMLCanvasElement;

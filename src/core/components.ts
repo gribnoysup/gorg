@@ -1,4 +1,4 @@
-import { Vector2d, ITransformComponent, ICanvas2DRenderer } from './types';
+import { Vector2d, ITransformComponent, ICanvas2DRenderer } from '../types';
 
 import {
   add,
@@ -77,4 +77,4 @@ export class TransformComponent implements ITransformComponent {
   }
 }
 
-export { IUpdateComponent, IRenderComponent } from './types';
+export { IUpdateComponent, IRenderComponent } from '../types';

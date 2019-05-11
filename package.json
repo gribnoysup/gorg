@@ -3,8 +3,8 @@
   "version": "0.4.0",
   "description": "Gorg – Gorgeous Game Engine",
   "main": "dist/gorg.js",
-  "umd:main": "dist/gorg.umd.production.js",
-  "module": "dist/gorg.es.production.js",
+  "umd:main": "dist/gorg.umd.js",
+  "module": "dist/gorg.es.js",
   "typings": "dist/src/index.d.ts",
   "files": [
     "dist"

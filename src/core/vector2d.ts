@@ -1,4 +1,4 @@
-import { Vector2d } from './types';
+import { Vector2d } from '../types';
 
 export function add([x1, y1]: Vector2d, [x2, y2]: Vector2d): Vector2d {
   return [x1 + x2, y1 + y2];
@@ -87,4 +87,4 @@ export function angleDegToVector(angle: number): Vector2d {
   return angleToVector(deg2Rad(angle));
 }
 
-export { Vector2d } from './types';
+export { Vector2d } from '../types';

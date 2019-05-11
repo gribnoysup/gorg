@@ -5,7 +5,7 @@ import {
   IScene,
   Rectangle,
   CanvasFillStrokeStyles,
-} from './types';
+} from '../types';
 
 import { GameObject } from './GameObject';
 

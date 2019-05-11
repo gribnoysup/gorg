@@ -2,7 +2,7 @@ import {
   IRenderComponent,
   IWorld,
   CanvasFillStrokeStyles,
-} from '../../core/types';
+} from '../../types';
 
 export class RectRendererComponent implements IRenderComponent {
   width: number;
