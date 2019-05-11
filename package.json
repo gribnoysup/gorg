@@ -17,7 +17,8 @@
     "microbundle:watch": "npm run microbundle -- --watch",
     "watch": "start-server-and-test :3000 microbundle:watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && npm run microbundle"
+    "build": "rm -rf dist && npm run microbundle",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [],
   "author": "Sergey Petushkov <petushkov.sergey@gmail.com>",
