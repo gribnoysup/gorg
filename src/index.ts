@@ -11,10 +11,12 @@ import * as utils from './utils';
 import { RectRendererComponent } from './addons/components/RectRendererComponent';
 
 import { Sprite } from './addons/Sprite';
+import { SpriteRendererComponent } from './addons/components/SpriteRendererComponent';
 
 const addons = {
   components: {
     RectRendererComponent,
+    SpriteRendererComponent,
   },
   Sprite,
 };

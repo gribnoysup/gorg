@@ -16,7 +16,7 @@ export class Sprite {
   spriteWidth: number;
   spriteHeight: number;
   ready: boolean;
-  onReadyCallback: () => void;
+  onReadyCallback?: (sprite: Sprite) => void;
 
   constructor(
     source: string,
@@ -25,11 +25,13 @@ export class Sprite {
     height?: number,
     spriteWidth?: number,
     spriteHeight?: number,
-    onReadyCallback: () => void = () => {}
+    onReadyCallback?: (sprite: Sprite) => void
   ) {
     this.ready = false;
     this.image = new Image(width, height);
-    this.image.onload = () => this.onReady();
+    this.image.onload = () => {
+      this.onReady();
+    };
     this.image.src = source;
     this.mode = mode;
     this.spriteWidth = spriteWidth || width || NaN;
@@ -39,7 +41,9 @@ export class Sprite {
 
   private onReady() {
     this.ready = true;
-    this.onReadyCallback();
+    if (typeof this.onReadyCallback === 'function') {
+      this.onReadyCallback(this);
+    }
   }
 
   getSpriteFragment(index: number = 0): SpriteFragment {
@@ -61,8 +65,9 @@ export class Sprite {
       };
     } else {
       const columns = Math.floor(image.width / spriteWidth);
-      const x = Math.floor(index / columns);
-      const y = index % columns;
+
+      const x = index % columns;
+      const y = Math.floor(index / columns);
 
       return {
         image: image,
@@ -75,4 +80,6 @@ export class Sprite {
       };
     }
   }
+
+  static SpriteMode = SpriteMode;
 }

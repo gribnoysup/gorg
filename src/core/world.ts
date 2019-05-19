@@ -29,6 +29,8 @@ export class Canvas2DRenderer implements ICanvas2DRenderer {
       throw new Error('Context not found on DOM element');
     }
 
+    context.imageSmoothingEnabled = false;
+
     this.context = context;
     this.currentCamera = null;
   }

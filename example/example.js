@@ -1,4 +1,4 @@
-import * as Gorg from './gorg.es.production.js';
+import * as Gorg from './gorg.es.js';
 
 window.Gorg = Gorg;
 
@@ -109,7 +109,22 @@ const cam1 = new OrthographicCamera(
   'black'
 );
 
-const scene = new Scene('main', [cam0, cam1, rect0, rect1, rect2, rect3]);
+const sprite = new addons.Sprite(
+  './bat_32x32.png',
+  addons.Sprite.SpriteMode.SpriteSheet,
+  64,
+  32,
+  32,
+  32
+);
+
+const bat = new GameObject('bat', {
+  render: [
+    new addons.components.SpriteRendererComponent(sprite, 64, 64, [0, 1], 15),
+  ],
+});
+
+const scene = new Scene('main', [cam0, cam1, rect0, rect1, rect2, rect3, bat]);
 
 const world = new World([scene], 60, 640, 480);
 

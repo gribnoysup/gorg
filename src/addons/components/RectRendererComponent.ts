@@ -1,8 +1,4 @@
-import {
-  IRenderComponent,
-  IWorld,
-  CanvasFillStrokeStyles,
-} from '../../types';
+import { IRenderComponent, IWorld, CanvasFillStrokeStyles } from '../../types';
 
 export class RectRendererComponent implements IRenderComponent {
   width: number;
