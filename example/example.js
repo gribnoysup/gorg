@@ -60,7 +60,7 @@ class BackAndForthUpdater {
 const rect0 = new GameObject('rect1', {
   update: [new RotateUpdater(5)],
   render: [
-    new addons.components.RectRendererComponent(100, 100, null, 'cyan', 3),
+    new addons.components.RectangleRendererComponent(100, 100, null, 'cyan', 3),
   ],
   transform: new TransformComponent({
     position: [-200, -100],
@@ -70,13 +70,19 @@ const rect0 = new GameObject('rect1', {
 });
 
 const rect1 = new GameObject('rect1', {
-  render: [new addons.components.RectRendererComponent(50, 50, 'yellow')],
+  render: [new addons.components.RectangleRendererComponent(50, 50, 'yellow')],
 });
 
 const rect2 = new GameObject('rect2', {
   update: [new BackAndForthUpdater(300, Vector2d.angleDegToVector(0), 10)],
   render: [
-    new addons.components.RectRendererComponent(25, 25, 'magenta', 'white', 2),
+    new addons.components.RectangleRendererComponent(
+      25,
+      25,
+      'magenta',
+      'white',
+      2
+    ),
   ],
   transform: new TransformComponent({
     position: [-150, 120],
@@ -88,7 +94,7 @@ const rect3 = new GameObject('rect3', {
     new BackAndForthUpdater(400, Vector2d.angleDegToVector(90), 20),
     new RotateUpdater(15),
   ],
-  render: [new addons.components.RectRendererComponent(30, 30, 'navy')],
+  render: [new addons.components.RectangleRendererComponent(30, 30, 'navy')],
   transform: new TransformComponent({
     position: [200, -200],
   }),

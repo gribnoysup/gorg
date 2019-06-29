@@ -8,14 +8,14 @@ import * as Vector2d from './core/Vector2d';
 
 import * as utils from './utils';
 
-import { RectRendererComponent } from './addons/components/RectRendererComponent';
+import { RectangleRendererComponent } from './addons/components/RectangleRendererComponent';
 
 import { Sprite } from './addons/Sprite';
 import { SpriteRendererComponent } from './addons/components/SpriteRendererComponent';
 
 const addons = {
   components: {
-    RectRendererComponent,
+    RectangleRendererComponent,
     SpriteRendererComponent,
   },
   Sprite,
