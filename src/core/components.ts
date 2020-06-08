@@ -1,4 +1,4 @@
-import { Vector2d, ITransformComponent, ICanvas2DRenderer } from '../types';
+import { Vector2, ITransformComponent, ICanvas2DRenderer } from '../types';
 
 import {
   add,
@@ -7,7 +7,7 @@ import {
   rotate,
   rotateDeg,
   angle,
-} from './Vector2d';
+} from './VecMath';
 
 const StateComponent = Map;
 
@@ -22,9 +22,9 @@ export { StateComponent };
  * and scale in the Scene
  */
 export class TransformComponent implements ITransformComponent {
-  position: Vector2d;
-  rotation: Vector2d;
-  scale: Vector2d;
+  position: Vector2;
+  rotation: Vector2;
+  scale: Vector2;
 
   constructor({
     position = [0, 0],
@@ -36,16 +36,20 @@ export class TransformComponent implements ITransformComponent {
     this.scale = scale;
   }
 
-  moveTo(vec: Vector2d) {
+  moveTo(vec: Vector2) {
     this.position = vec;
   }
 
-  moveBy(vec: Vector2d) {
+  moveBy(vec: Vector2) {
     this.position = add(this.position, vec);
   }
 
   rotateTo(angle: number) {
     this.rotation = angleToVector(angle);
+  }
+
+  rotateToVector(angleVector: Vector2) {
+    this.rotation = angleVector;
   }
 
   rotateToDeg(angle: number) {
@@ -60,11 +64,11 @@ export class TransformComponent implements ITransformComponent {
     this.rotation = rotateDeg(this.rotation, angle);
   }
 
-  scaleTo(vec: Vector2d) {
+  scaleTo(vec: Vector2) {
     this.scale = vec;
   }
 
-  scaleBy(vec: Vector2d) {
+  scaleBy(vec: Vector2) {
     this.scale = add(this.scale, vec);
   }
 

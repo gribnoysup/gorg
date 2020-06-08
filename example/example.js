@@ -8,10 +8,132 @@ const {
   GameObject,
   OrthographicCamera,
   TransformComponent,
-  Vector2d,
+  VecMath,
   addons,
   utils,
 } = Gorg;
+
+function floatFix(n, correct = 8) {
+  return Number(n.toFixed(correct));
+}
+
+function moveBy(v0) {
+  return (v1) => VecMath.add(v0, v1);
+}
+
+const points = [
+  [165, 291],
+  [223, 219],
+  [230, 175],
+  [200, 177],
+  [204, 372],
+  [218, 302],
+  [268, 282],
+  [294, 366],
+  [347, 343],
+  [395, 280],
+  [383, 247],
+  [347, 273],
+  [379, 383],
+  [430, 348],
+  [451, 223],
+  [428, 184],
+  [414, 218],
+  [485, 348],
+  [517, 354],
+  [540, 265],
+  [534, 205],
+  [508, 168],
+  [497, 212],
+  [569, 346],
+  [634, 346],
+  [668, 311],
+  [660, 250],
+  [616, 243],
+  [598, 291],
+  [617, 325],
+  [676, 342],
+];
+
+const hello = new addons.CatmullRomSpline(
+  points.map(moveBy([-400, -350])),
+  false
+);
+
+const square = new addons.CatmullRomSpline(
+  [
+    [0, 20],
+    [20, 0],
+    [180, 0],
+    [200, 20],
+    [200, 80],
+    [180, 100],
+    [20, 100],
+    [0, 80],
+  ].map(moveBy([-250, 100])),
+  true
+);
+
+const line = new addons.CatmullRomSpline([
+  [-50, 0],
+  [50, 0],
+]);
+
+class SplineRenderer {
+  constructor(spline, fragmentsPerSegment = 10) {
+    this.spline = spline;
+    this.fragmentsPerSegment = fragmentsPerSegment;
+  }
+
+  render(world) {
+    const { spline, fragmentsPerSegment } = this;
+
+    const step = 1 / fragmentsPerSegment;
+    const ctx = world.renderer.context;
+
+    ctx.beginPath();
+
+    spline.points.forEach(([x, y]) => {
+      ctx.moveTo(x, y);
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
+    });
+
+    ctx.fill();
+
+    ctx.beginPath();
+
+    for (let t = 0; t <= spline.length; t = floatFix(t + step, 3)) {
+      const point = spline.getPoint(t);
+      ctx.lineTo(point[0], point[1]);
+    }
+
+    ctx.stroke();
+  }
+}
+
+class SplineMover {
+  constructor(spline, startPosition = 0, byDistance = true) {
+    this.spline = spline;
+    this.position = startPosition;
+    this.byDistance = byDistance;
+  }
+
+  update(world, scene, gameObject, deltaTime) {
+    const t = this.byDistance
+      ? this.spline.getTForDistance(this.position)
+      : this.position;
+
+    const position = this.spline.getPoint(t);
+    const rotation = this.spline.getTangent(t);
+
+    gameObject.components.transform.moveTo(position);
+    gameObject.components.transform.rotateToVector(rotation);
+
+    const step = this.byDistance ? 20 / deltaTime : 1 / deltaTime;
+
+    this.position += step;
+  }
+}
 
 class RotateUpdater {
   constructor(angle) {
@@ -26,7 +148,7 @@ class RotateUpdater {
 class BackAndForthUpdater {
   constructor(
     distance = Infinity,
-    direction = Vector2d.angleDegToVector(0),
+    direction = VecMath.angleDegToVector(0),
     step = 1
   ) {
     this.distance = distance;
@@ -46,8 +168,8 @@ class BackAndForthUpdater {
 
     const step = this.step * (1 / deltaTime);
 
-    const move = Vector2d.multiplyScalar(
-      Vector2d.multiplyScalar(this.direction, step),
+    const move = VecMath.multiplyScalar(
+      VecMath.multiplyScalar(this.direction, step),
       this.isMovingForward
     );
 
@@ -64,21 +186,27 @@ const rect0 = new GameObject('rect1', {
   ],
   transform: new TransformComponent({
     position: [-200, -100],
-    rotation: Vector2d.angleDegToVector(45),
+    rotation: VecMath.angleDegToVector(45),
     scale: [2, 2],
   }),
 });
 
 const rect1 = new GameObject('rect1', {
+  update: [new SplineMover(square)],
   render: [new addons.components.RectangleRendererComponent(50, 50, 'yellow')],
 });
 
+const rect1_1 = new GameObject('rect1_1', {
+  update: [new SplineMover(square, 0, false)],
+  render: [new addons.components.RectangleRendererComponent(30, 30, 'red')],
+});
+
 const rect2 = new GameObject('rect2', {
-  update: [new BackAndForthUpdater(300, Vector2d.angleDegToVector(0), 10)],
+  update: [new BackAndForthUpdater(300, VecMath.angleDegToVector(0), 10)],
   render: [
     new addons.components.RectangleRendererComponent(
-      25,
-      25,
+      20,
+      20,
       'magenta',
       'white',
       2
@@ -91,7 +219,7 @@ const rect2 = new GameObject('rect2', {
 
 const rect3 = new GameObject('rect3', {
   update: [
-    new BackAndForthUpdater(400, Vector2d.angleDegToVector(90), 20),
+    new BackAndForthUpdater(400, VecMath.angleDegToVector(90), 20),
     new RotateUpdater(15),
   ],
   render: [new addons.components.RectangleRendererComponent(30, 30, 'navy')],
@@ -107,11 +235,11 @@ const cam1 = new OrthographicCamera(
   {
     transform: new TransformComponent({
       position: [-10, -45],
-      rotation: Vector2d.angleDegToVector(45),
+      rotation: VecMath.angleDegToVector(45),
       scale: [0.2, 0.2],
     }),
   },
-  { x: 0.8, y: 0.8, w: 0.2, h: 0.2 },
+  { x: 0.6, y: 0.6, w: 0.4, h: 0.4 },
   'black'
 );
 
@@ -124,17 +252,41 @@ const sprite = new addons.Sprite(
   32
 );
 
+const spline = new GameObject('spline', {
+  render: [new SplineRenderer(hello)],
+});
+
+const spline1 = new GameObject('spline1', {
+  render: [new SplineRenderer(square)],
+});
+
 const bat = new GameObject('bat', {
   render: [
     new addons.components.SpriteRendererComponent(sprite, 64, 64, [0, 1], 15),
   ],
+  update: [new SplineMover(hello, 0)],
 });
 
-const scene = new Scene('main', [cam0, cam1, rect0, rect1, rect2, rect3, bat]);
+const scene = new Scene('main', [
+  cam0,
+  cam1,
+  rect0,
+  spline1,
+  rect1,
+  rect1_1,
+  rect2,
+  rect3,
+  spline,
+  bat,
+]);
 
 const world = new World([scene], 60, 640, 480);
 
 window.world = world;
+
+window.scene = scene;
+
+(window.splines = {}).line = line;
 
 world.renderer.appendTo(document.querySelector('#root'));
 

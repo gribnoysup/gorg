@@ -4,14 +4,14 @@ import {
   IRuntimeFrameTimestamps,
   IOrthographicCamera,
   IScene,
-  Vector2d,
+  Vector2,
   Rectangle,
   CanvasFillStrokeStyles,
 } from '../types';
 
 import { now } from '../utils';
 
-import { add, multiply, subtract, angle } from './Vector2d';
+import { add, multiply, subtract, angle } from './VecMath';
 
 export class Canvas2DRenderer implements ICanvas2DRenderer {
   view: HTMLCanvasElement;
@@ -99,8 +99,8 @@ export class Canvas2DRenderer implements ICanvas2DRenderer {
       this.currentCamera.viewportRect
     );
 
-    const offset: Vector2d = [x, y];
-    const middle: Vector2d = [w / 2, h / 2];
+    const offset: Vector2 = [x, y];
+    const middle: Vector2 = [w / 2, h / 2];
 
     const translate = subtract(add(offset, middle), multiply(position, scale));
 

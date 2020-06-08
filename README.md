@@ -139,8 +139,6 @@ components.
 ```js
 // file:./RectRendererComponent.js
 
-import Vector2d from 'gorg';
-
 export class RectRendererComponent {
   constructor(width, height, fillStyle) {
     this.width = width;

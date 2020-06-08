@@ -26,7 +26,7 @@
   "devDependencies": {
     "acorn": "^6.1.1",
     "browser-sync": "^2.26.7",
-    "microbundle": "^0.11.0",
+    "microbundle": "^0.12.0",
     "start-server-and-test": "^1.7.12",
     "tslib": "^1.9.3",
     "typescript": "^3.4.5"

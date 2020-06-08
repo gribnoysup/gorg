@@ -1,4 +1,4 @@
-export type Vector2d = [number, number];
+export type Vector2 = [number, number];
 
 export type Rectangle = {
   x: number;
@@ -15,9 +15,9 @@ export interface IStateComponent<K = any, V = any> {
 }
 
 export interface ITransformComponent {
-  position: Vector2d;
-  rotation: Vector2d;
-  scale: Vector2d;
+  position: Vector2;
+  rotation: Vector2;
+  scale: Vector2;
   adjustRendererContext(renderer: ICanvas2DRenderer): void;
 }
 

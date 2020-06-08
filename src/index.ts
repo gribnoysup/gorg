@@ -4,7 +4,7 @@ export { GameObject } from './core/GameObject';
 export { OrthographicCamera } from './core/OrthographicCamera';
 export { TransformComponent, StateComponent } from './core/components';
 
-import * as Vector2d from './core/Vector2d';
+import * as VecMath from './core/VecMath';
 
 import * as utils from './utils';
 
@@ -12,6 +12,7 @@ import { RectangleRendererComponent } from './addons/components/RectangleRendere
 
 import { Sprite } from './addons/Sprite';
 import { SpriteRendererComponent } from './addons/components/SpriteRendererComponent';
+import { CatmullRomSpline } from './addons/Spline';
 
 const addons = {
   components: {
@@ -19,6 +20,7 @@ const addons = {
     SpriteRendererComponent,
   },
   Sprite,
+  CatmullRomSpline,
 };
 
-export { Vector2d, addons, utils };
+export { VecMath, addons, utils };
