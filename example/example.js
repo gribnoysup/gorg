@@ -272,7 +272,7 @@ window.world = world;
 
 window.scene = scene;
 
-(window.splines = {}).line = line;
+window.splines = { line };
 
 world.renderer.appendTo(document.querySelector('#root'));
 
