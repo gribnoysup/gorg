@@ -1,14 +1,3 @@
-import {
-  IWorld,
-  ICanvas2DRenderer,
-  IRuntimeFrameTimestamps,
-  IOrthographicCamera,
-  IScene,
-  Vector2,
-  Rectangle,
-  CanvasFillStrokeStyles,
-} from '../types';
-
 import { now } from '../utils';
 
 import { add, multiply, subtract, angle } from './VecMath';
@@ -115,7 +104,10 @@ export class Canvas2DRenderer implements ICanvas2DRenderer {
     this.context.restore();
   }
 
-  fillRectViewport(rect: Rectangle, fillStyle: CanvasFillStrokeStyles) {
+  fillRectViewport(
+    rect: Rectangle,
+    fillStyle: CanvasFillStrokeStyles['fillStyle']
+  ) {
     const { x, y, w, h } = this.getPixelsRectInViewport(rect);
     const _tmp = this.context.fillStyle;
     this.context.fillStyle = fillStyle;

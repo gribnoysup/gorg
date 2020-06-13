@@ -1,4 +1,3 @@
-import { Vector2 } from '../types';
 import {
   distance,
   subtract,

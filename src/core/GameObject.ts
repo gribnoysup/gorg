@@ -1,10 +1,3 @@
-import {
-  IGameObject,
-  GameObjectComponents,
-  IOrthographicCamera,
-  IWorld,
-  IScene,
-} from '../types';
 import { StateComponent } from './StateComponent';
 import { TransformComponent } from './TransformComponent';
 

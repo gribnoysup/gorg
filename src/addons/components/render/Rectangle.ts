@@ -1,21 +1,15 @@
-import {
-  IRenderComponent,
-  IWorld,
-  CanvasFillStrokeStyles,
-} from '../../../types';
-
 export class RectangleRenderComponent implements IRenderComponent {
   width: number;
   height: number;
-  fillStyle: CanvasFillStrokeStyles | null;
-  strokeStyle: CanvasFillStrokeStyles | null;
+  fillStyle: CanvasFillStrokeStyles['fillStyle'] | null;
+  strokeStyle: CanvasFillStrokeStyles['strokeStyle'] | null;
   lineWidth: number;
 
   constructor(
     width: number,
     height: number,
-    fillStyle: CanvasFillStrokeStyles | null = null,
-    strokeStyle: CanvasFillStrokeStyles | null = null,
+    fillStyle: CanvasFillStrokeStyles['fillStyle'] | null = null,
+    strokeStyle: CanvasFillStrokeStyles['strokeStyle'] | null = null,
     lineWidth: number = 1
   ) {
     this.width = width;

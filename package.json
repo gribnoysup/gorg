@@ -18,8 +18,9 @@
     "microbundle:watch": "npm run microbundle:dev -- --watch",
     "watch": "start-server-and-test :3000 microbundle:watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && npm run microbundle --  --format modern,umd,cjs",
-    "prepublishOnly": "npm run build"
+    "build": "rm -rf dist && npm run microbundle --  --format modern,umd,cjs && npm run copy_types",
+    "prepublishOnly": "npm run build",
+    "copy_types": "cp -r ./src/types ./dist/src/types"
   },
   "keywords": [],
   "author": "Sergey Petushkov <petushkov.sergey@gmail.com>",

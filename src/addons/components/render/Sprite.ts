@@ -1,5 +1,3 @@
-import { IRenderComponent, IWorld } from '../../../types';
-
 import { Sprite } from '../../Sprite';
 
 export class SpriteRenderComponent implements IRenderComponent {

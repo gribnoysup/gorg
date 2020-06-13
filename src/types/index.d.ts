@@ -1,31 +1,29 @@
-export type Vector2 = [number, number];
+declare type Vector2 = [number, number];
 
-export type Rectangle = {
+declare type Rectangle = {
   x: number;
   y: number;
   w: number;
   h: number;
 };
 
-export type CanvasFillStrokeStyles = string | CanvasGradient | CanvasPattern;
-
 interface IComponent {
   init?: (world: IWorld, scene: IScene, gameObject: IGameObject) => void;
 }
 
-export interface IStateComponent<K = unknown, V = unknown> extends IComponent {
+declare interface IStateComponent<K = unknown, V = unknown> extends IComponent {
   get(key: K): V | undefined;
   set(key: K, value: V): IStateComponent<K, V>;
 }
 
-export interface ITransformComponent extends IComponent {
+declare interface ITransformComponent extends IComponent {
   position: Vector2;
   rotation: Vector2;
   scale: Vector2;
   adjustRendererContext(renderer: ICanvas2DRenderer): void;
 }
 
-export interface IRenderComponent extends IComponent {
+declare interface IRenderComponent extends IComponent {
   render(
     world: IWorld,
     scene: IScene,
@@ -35,7 +33,7 @@ export interface IRenderComponent extends IComponent {
   ): void;
 }
 
-export interface IUpdateComponent extends IComponent {
+declare interface IUpdateComponent extends IComponent {
   update(
     world: IWorld,
     scene: IScene,
@@ -44,14 +42,14 @@ export interface IUpdateComponent extends IComponent {
   ): void;
 }
 
-export type GameObjectComponents = {
+declare type GameObjectComponents = {
   state: IStateComponent;
   transform: ITransformComponent;
   update: IUpdateComponent[];
   render: IRenderComponent[];
 };
 
-export interface IGameObject {
+declare interface IGameObject {
   name: string;
   disabled: boolean;
   components: GameObjectComponents;
@@ -65,12 +63,12 @@ export interface IGameObject {
   ): void;
 }
 
-export interface IOrthographicCamera extends IGameObject {
-  background: CanvasFillStrokeStyles;
+declare interface IOrthographicCamera extends IGameObject {
+  background: CanvasFillStrokeStyles['fillStyle'];
   viewportRect: Rectangle;
 }
 
-export interface IScene {
+declare interface IScene {
   name: string;
   gameObjects: IGameObject[];
   init(world: IWorld): void;
@@ -80,7 +78,7 @@ export interface IScene {
   render(world: IWorld, remainder: number): void;
 }
 
-export interface IRuntimeFrameTimestamps {
+declare interface IRuntimeFrameTimestamps {
   updateLag: number;
   currentUpdateTime: number;
   previousUpdateTime: number;
@@ -88,7 +86,7 @@ export interface IRuntimeFrameTimestamps {
   reset(): void;
 }
 
-export interface ICanvas2DRenderer {
+declare interface ICanvas2DRenderer {
   view: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   currentCamera: IOrthographicCamera | null;
@@ -99,7 +97,7 @@ export interface ICanvas2DRenderer {
   draw(cb: () => void): void;
 }
 
-export interface IWorld {
+declare interface IWorld {
   renderer: ICanvas2DRenderer;
   setActiveScene(sceneName: string): void;
   start(sceneName: string): void;

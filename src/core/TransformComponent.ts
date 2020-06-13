@@ -1,5 +1,3 @@
-import { Vector2, ITransformComponent, ICanvas2DRenderer } from '../types';
-
 import {
   add,
   angleToVector,

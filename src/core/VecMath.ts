@@ -1,5 +1,3 @@
-import { Vector2 } from '../types';
-
 export function add(...vectors: Vector2[]): Vector2 {
   return vectors
     .slice(1)
@@ -113,5 +111,3 @@ export function lerp(v0: Vector2, v1: Vector2, t: number): Vector2 {
 }
 
 export const mix = lerp;
-
-export { Vector2 } from '../types';

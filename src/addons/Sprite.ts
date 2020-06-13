@@ -1,5 +1,3 @@
-import { Rectangle } from '../types';
-
 export enum SpriteMode {
   Sprite = 0,
   SpriteSheet = 1,

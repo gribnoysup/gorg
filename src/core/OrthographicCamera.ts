@@ -1,24 +1,15 @@
-import {
-  GameObjectComponents,
-  IOrthographicCamera,
-  IWorld,
-  IScene,
-  Rectangle,
-  CanvasFillStrokeStyles,
-} from '../types';
-
 import { GameObject } from './GameObject';
 
 export class OrthographicCamera extends GameObject
   implements IOrthographicCamera {
   viewportRect: Rectangle;
-  background: CanvasFillStrokeStyles;
+  background: CanvasFillStrokeStyles['fillStyle'];
 
   constructor(
     name: string,
     components: Partial<GameObjectComponents>,
     viewportRect: Rectangle = { x: 0, y: 0, w: 1, h: 1 },
-    background: CanvasFillStrokeStyles = '#304d79'
+    background: CanvasFillStrokeStyles['fillStyle'] = '#304d79'
   ) {
     super(name, components);
     this.viewportRect = viewportRect;
