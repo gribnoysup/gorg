@@ -9,14 +9,6 @@ import {
   angle,
 } from './VecMath';
 
-const StateComponent = Map;
-
-/**
- * Key value storage component for GameObject to share
- * state across components
- */
-export { StateComponent };
-
 /**
  * Component that keeps GameObject position, rotation
  * and scale in the Scene
@@ -80,5 +72,3 @@ export class TransformComponent implements ITransformComponent {
     renderer.context.scale(...scale);
   }
 }
-
-export { IUpdateComponent, IRenderComponent } from '../types';

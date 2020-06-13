@@ -9,13 +9,13 @@ build literally anything you want. Let's take a closer look:
 Everything starts with a World.
 
 ```js
-import { World } from 'gorg';
+import { Core } from 'gorg';
 
 const width = 640;
 const height = 480;
 const fps = 60;
 
-const world = new World([], fps, width, height);
+const world = new Core.World([], fps, width, height);
 
 world.renderer.appendTo(document.querySelector('#app'));
 ```
@@ -30,18 +30,17 @@ it. You can think of scenes as a level in your game: during the game loop, your
 player will travel from scene to scene.
 
 ```diff
-- import { World } from 'gorg';
-+ import { World, Scene } from 'gorg';
+import { Core } from 'gorg';
 
 const width = 640;
 const height = 480;
 const fps = 60;
 
-const world = new World([], fps, width, height);
+const world = new Core.World([], fps, width, height);
 
 world.renderer.appendTo(document.querySelector('#app'));
 
-+ const scene = new Scene('main', []);
++ const scene = new Core.Scene('main', []);
 
 + world.addScenes(scene);
 ```
@@ -60,20 +59,19 @@ on the screen, it needs a camera. Cameras are a special case of the `GameObject`
 objects visible in the world.
 
 ```diff
-- import { World, Scene } from 'gorg';
-+ import { World, Scene, OrthographicCamera } from 'gorg';
+import { Core } from 'gorg';
 
 const width = 640;
 const height = 480;
 const fps = 60;
 
-const world = new World([], fps, width, height);
+const world = new Core.World([], fps, width, height);
 
 world.renderer.appendTo(document.querySelector('#app'));
 
-const scene = new Scene('main', []);
+const scene = new Core.Scene('main', []);
 
-+ const camera = new OrthographicCamera('camera');
++ const camera = new Core.OrthographicCamera('camera');
 
 + scene.addObjects(camera);
 
@@ -91,22 +89,21 @@ that they will find together are `GameObject`, the possibilities are endless!
 But let's start with something a little bit more basic.
 
 ```diff
-- import { World, Scene, OrthographicCamera } from 'gorg';
-+ import { World, Scene, OrthographicCamera, GameObject } from 'gorg';
+import { Core } from 'gorg';
 
 const width = 640;
 const height = 480;
 const fps = 60;
 
-const world = new World([], fps, width, height);
+const world = new Core.World([], fps, width, height);
 
 world.renderer.appendTo(document.querySelector('#app'));
 
-const scene = new Scene('main', []);
+const scene = new Core.Scene('main', []);
 
-const camera = new OrthographicCamera('camera');
+const camera = new Core.OrthographicCamera('camera');
 
-+ const rectangle = new GameObject('rectangle');
++ const rectangle = new Core.GameObject('rectangle');
 
 - scene.addObjects(camera);
 + scene.addObjects([camera, rectangle]);
@@ -180,7 +177,7 @@ export class RotateUpdaterComponent {
 Okay, let's wrap up and put everything together:
 
 ```diff
-import { World, Scene, OrthographicCamera, GameObject } from 'gorg';
+import { Core } from 'gorg';
 
 + import { RectRendererComponent } from './RectRendererComponent.js';
 + import { RotateUpdaterComponent } from './RotateUpdaterComponent.js';
@@ -189,13 +186,13 @@ const width = 640;
 const height = 480;
 const fps = 60;
 
-const world = new World([], fps, width, height);
+const world = new Core.World([], fps, width, height);
 
 world.renderer.appendTo(document.querySelector('#app'));
 
-const scene = new Scene('main', []);
+const scene = new Core.Scene('main', []);
 
-const camera = new OrthographicCamera('camera');
+const camera = new Core.OrthographicCamera('camera');
 
 - const rectangle = new GameObject('rectangle');
 + const rectangle = new GameObject('rectangle', {

@@ -1,6 +1,6 @@
-import * as Gorg from './gorg.es.js';
+import { Core, Addons } from './gorg.modern.js';
 
-window.Gorg = Gorg;
+window.Gorg = { Core, Addons };
 
 const {
   World,
@@ -9,9 +9,7 @@ const {
   OrthographicCamera,
   TransformComponent,
   VecMath,
-  addons,
-  utils,
-} = Gorg;
+} = Core;
 
 function floatFix(n, correct = 8) {
   return Number(n.toFixed(correct));
@@ -55,12 +53,12 @@ const points = [
   [676, 342],
 ];
 
-const hello = new addons.CatmullRomSpline(
+const hello = new Addons.CatmullRomSpline(
   points.map(moveBy([-400, -350])),
   false
 );
 
-const square = new addons.CatmullRomSpline(
+const square = new Addons.CatmullRomSpline(
   [
     [0, 20],
     [20, 0],
@@ -74,7 +72,7 @@ const square = new addons.CatmullRomSpline(
   true
 );
 
-const line = new addons.CatmullRomSpline([
+const line = new Addons.CatmullRomSpline([
   [-50, 0],
   [50, 0],
 ]);
@@ -181,9 +179,7 @@ class BackAndForthUpdater {
 
 const rect0 = new GameObject('rect1', {
   update: [new RotateUpdater(5)],
-  render: [
-    new addons.components.RectangleRendererComponent(100, 100, null, 'cyan', 3),
-  ],
+  render: [new Addons.RectangleRenderComponent(100, 100, null, 'cyan', 3)],
   transform: new TransformComponent({
     position: [-200, -100],
     rotation: VecMath.angleDegToVector(45),
@@ -193,25 +189,17 @@ const rect0 = new GameObject('rect1', {
 
 const rect1 = new GameObject('rect1', {
   update: [new SplineMover(square)],
-  render: [new addons.components.RectangleRendererComponent(50, 50, 'yellow')],
+  render: [new Addons.RectangleRenderComponent(50, 50, 'yellow')],
 });
 
 const rect1_1 = new GameObject('rect1_1', {
   update: [new SplineMover(square, 0, false)],
-  render: [new addons.components.RectangleRendererComponent(30, 30, 'red')],
+  render: [new Addons.RectangleRenderComponent(30, 30, 'red')],
 });
 
 const rect2 = new GameObject('rect2', {
   update: [new BackAndForthUpdater(300, VecMath.angleDegToVector(0), 10)],
-  render: [
-    new addons.components.RectangleRendererComponent(
-      20,
-      20,
-      'magenta',
-      'white',
-      2
-    ),
-  ],
+  render: [new Addons.RectangleRenderComponent(20, 20, 'magenta', 'white', 2)],
   transform: new TransformComponent({
     position: [-150, 120],
   }),
@@ -222,7 +210,7 @@ const rect3 = new GameObject('rect3', {
     new BackAndForthUpdater(400, VecMath.angleDegToVector(90), 20),
     new RotateUpdater(15),
   ],
-  render: [new addons.components.RectangleRendererComponent(30, 30, 'navy')],
+  render: [new Addons.RectangleRenderComponent(30, 30, 'navy')],
   transform: new TransformComponent({
     position: [200, -200],
   }),
@@ -243,9 +231,9 @@ const cam1 = new OrthographicCamera(
   'black'
 );
 
-const sprite = new addons.Sprite(
+const sprite = new Addons.Sprite(
   './bat_32x32.png',
-  addons.Sprite.SpriteMode.SpriteSheet,
+  Addons.Sprite.SpriteMode.SpriteSheet,
   64,
   32,
   32,
@@ -261,9 +249,7 @@ const spline1 = new GameObject('spline1', {
 });
 
 const bat = new GameObject('bat', {
-  render: [
-    new addons.components.SpriteRendererComponent(sprite, 64, 64, [0, 1], 15),
-  ],
+  render: [new Addons.SpriteRenderComponent(sprite, 64, 64, [0, 1], 15)],
   update: [new SplineMover(hello, 0)],
 });
 

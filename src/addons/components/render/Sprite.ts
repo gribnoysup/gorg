@@ -1,8 +1,8 @@
-import { IRenderComponent, IWorld } from '../../types';
+import { IRenderComponent, IWorld } from '../../../types';
 
-import { Sprite } from '../Sprite';
+import { Sprite } from '../../Sprite';
 
-export class SpriteRendererComponent implements IRenderComponent {
+export class SpriteRenderComponent implements IRenderComponent {
   sprite: Sprite;
   animationFrames: number[];
   currentFrame: number;

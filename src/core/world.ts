@@ -172,7 +172,7 @@ export class World implements IWorld {
     height: number = 240
   ) {
     this.scenes = new Map(
-      scenes.map<[string, IScene]>(scene => [scene.name, scene])
+      scenes.map<[string, IScene]>((scene) => [scene.name, scene])
     );
     this.deltaTime = 1000 / fps;
     this.activeScene = null;
@@ -185,7 +185,7 @@ export class World implements IWorld {
 
   addScenes(scenes: IScene | IScene[]) {
     if (Array.isArray(scenes)) {
-      scenes.forEach(scene => {
+      scenes.forEach((scene) => {
         this.scenes.set(scene.name, scene);
       });
     } else {

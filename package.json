@@ -4,7 +4,7 @@
   "description": "Gorg – Gorgeous Game Engine",
   "main": "dist/gorg.js",
   "umd:main": "dist/gorg.umd.js",
-  "module": "dist/gorg.es.js",
+  "module": "dist/gorg.modern.js",
   "typings": "dist/src/index.d.ts",
   "files": [
     "dist"
@@ -14,10 +14,11 @@
     "tsc": "tsc",
     "tsc:watch": "npm run tsc -- -w",
     "microbundle": "microbundle",
-    "microbundle:watch": "npm run microbundle -- --watch",
+    "microbundle:dev": "npm run microbundle -- --no-compress --format modern",
+    "microbundle:watch": "npm run microbundle:dev -- --watch",
     "watch": "start-server-and-test :3000 microbundle:watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && npm run microbundle",
+    "build": "rm -rf dist && npm run microbundle --  --format modern,umd,cjs",
     "prepublishOnly": "npm run build"
   },
   "keywords": [],

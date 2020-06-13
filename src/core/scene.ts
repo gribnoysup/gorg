@@ -10,8 +10,14 @@ export class Scene {
     this.gameObjects = gameObjects;
   }
 
+  init(world: IWorld) {
+    this.gameObjects.forEach((gameObject) => {
+      gameObject.init(world, this);
+    });
+  }
+
   getActiveObjects() {
-    return this.gameObjects.filter(obj => obj.disabled === false);
+    return this.gameObjects.filter((obj) => obj.disabled === false);
   }
 
   addObjects(gameObjects: IGameObject | IGameObject[]) {
@@ -25,10 +31,10 @@ export class Scene {
   }
 
   render(world: IWorld, remainder: number) {
-    for (const obj of this.getActiveObjects()) {
-      if (obj instanceof OrthographicCamera) {
-        obj.render(world, this, obj, remainder);
+    this.getActiveObjects().forEach((gameObject) => {
+      if (gameObject instanceof OrthographicCamera) {
+        gameObject.render(world, this, gameObject, remainder);
       }
-    }
+    });
   }
 }

@@ -5,8 +5,8 @@ import {
   IWorld,
   IScene,
 } from '../types';
-
-import { StateComponent, TransformComponent } from './components';
+import { StateComponent } from './StateComponent';
+import { TransformComponent } from './TransformComponent';
 
 export class GameObject implements IGameObject {
   name: string;
@@ -25,8 +25,27 @@ export class GameObject implements IGameObject {
     };
   }
 
+  init(world: IWorld, scene: IScene) {
+    if (this.components.state.init) {
+      this.components.state.init(world, scene, this);
+    }
+    if (this.components.transform.init) {
+      this.components.transform.init(world, scene, this);
+    }
+    this.components.update.forEach((component) => {
+      if (component.init) {
+        component.init(world, scene, this);
+      }
+    });
+    this.components.render.forEach((component) => {
+      if (component.init) {
+        component.init(world, scene, this);
+      }
+    });
+  }
+
   update(world: IWorld, scene: IScene, deltaTime: number) {
-    this.components.update.forEach(updateComponent => {
+    this.components.update.forEach((updateComponent) => {
       updateComponent.update(world, scene, this, deltaTime);
     });
   }
@@ -37,7 +56,7 @@ export class GameObject implements IGameObject {
     camera: IOrthographicCamera,
     remainder: number
   ) {
-    this.components.render.forEach(renderComponent => {
+    this.components.render.forEach((renderComponent) => {
       renderComponent.render(world, scene, this, camera, remainder);
     });
   }

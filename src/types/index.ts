@@ -9,19 +9,23 @@ export type Rectangle = {
 
 export type CanvasFillStrokeStyles = string | CanvasGradient | CanvasPattern;
 
-export interface IStateComponent<K = any, V = any> {
+interface IComponent {
+  init?: (world: IWorld, scene: IScene, gameObject: IGameObject) => void;
+}
+
+export interface IStateComponent<K = unknown, V = unknown> extends IComponent {
   get(key: K): V | undefined;
   set(key: K, value: V): IStateComponent<K, V>;
 }
 
-export interface ITransformComponent {
+export interface ITransformComponent extends IComponent {
   position: Vector2;
   rotation: Vector2;
   scale: Vector2;
   adjustRendererContext(renderer: ICanvas2DRenderer): void;
 }
 
-export interface IRenderComponent {
+export interface IRenderComponent extends IComponent {
   render(
     world: IWorld,
     scene: IScene,
@@ -31,7 +35,7 @@ export interface IRenderComponent {
   ): void;
 }
 
-export interface IUpdateComponent {
+export interface IUpdateComponent extends IComponent {
   update(
     world: IWorld,
     scene: IScene,
@@ -51,6 +55,7 @@ export interface IGameObject {
   name: string;
   disabled: boolean;
   components: GameObjectComponents;
+  init(world: IWorld, scene: IScene): void;
   update(world: IWorld, scene: IScene, deltaTime: number): void;
   render(
     world: IWorld,
@@ -68,6 +73,7 @@ export interface IOrthographicCamera extends IGameObject {
 export interface IScene {
   name: string;
   gameObjects: IGameObject[];
+  init(world: IWorld): void;
   getActiveObjects(): IGameObject[];
   addObjects(gameObjects: IGameObject | IGameObject[]): void;
   update(world: IWorld, deltaTime: number): void;
