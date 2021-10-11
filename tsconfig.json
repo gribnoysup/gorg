@@ -1,29 +1,21 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "lib": ["dom", "esnext"],
-    "importHelpers": true,
+    "allowJs": false,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
     "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "es2018"],
+    "module": "commonjs",
+    "removeComments": true,
+    "skipLibCheck": true,
     "sourceMap": true,
-    "rootDir": "./",
     "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
+    "target": "es2018",
     "baseUrl": "./",
     "paths": {
       "*": ["src/*", "node_modules/*"]
-    },
-    "esModuleInterop": true
+    }
   }
 }

@@ -8,23 +8,9 @@ import {
   rotate,
 } from '../core/VecMath';
 
+import { lerp, clamp, floatFix, decimals } from '../core/Math';
+
 type SplineSegment = [Vector2, Vector2, Vector2, Vector2];
-
-function lerp(n0: number, n1: number, t: number): number {
-  return (1 - t) * n0 + t * n1;
-}
-
-function floatFix(n: number, correct = 8): number {
-  return Number(n.toFixed(correct));
-}
-
-function decimals(n: number): number {
-  return (n.toString().split('.')[1] || '').length;
-}
-
-function clamp(min: number, max: number, n: number): number {
-  return Math.min(max, Math.max(min, n));
-}
 
 /**
  * Keeps track of arc lenght samples for a spline of any kind and allows to

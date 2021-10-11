@@ -5,6 +5,7 @@ import {
   rotate,
   rotateDeg,
   angle,
+  multiply,
 } from './VecMath';
 
 /**
@@ -65,8 +66,10 @@ export class TransformComponent implements ITransformComponent {
   adjustRendererContext(renderer: ICanvas2DRenderer) {
     const { position, rotation, scale } = this;
 
-    renderer.context.translate(...position);
-    renderer.context.rotate(angle(rotation));
-    renderer.context.scale(...scale);
+    const rot = angle(rotation);
+    const xAxis = multiply(rotate([1, 0], rot), scale);
+    const yAxis = multiply(rotate([0, 1], rot), scale);
+
+    renderer.context.transform(...xAxis, ...yAxis, ...position);
   }
 }

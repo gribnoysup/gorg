@@ -1,7 +1,10 @@
 import { GameObject } from './GameObject';
-
-export class OrthographicCamera extends GameObject
-  implements IOrthographicCamera {
+import { angle, divide, multiply, rotate, subtract } from './VecMath';
+import { World } from './World';
+export class OrthographicCamera
+  extends GameObject
+  implements IOrthographicCamera
+{
   viewportRect: Rectangle;
   background: CanvasFillStrokeStyles['fillStyle'];
 
@@ -16,6 +19,30 @@ export class OrthographicCamera extends GameObject
     this.background = background;
   }
 
+  projectWorldToCamera(
+    {
+      renderer: {
+        view: { width, height },
+      },
+    }: World,
+    vec: Vector2
+  ): any {
+    const {
+      viewportRect: { x, y, w, h },
+      components: {
+        transform: { position, rotation, scale },
+      },
+    } = this;
+
+    const viewOffset = multiply([x, y], [width, height]);
+    const viewCenter = multiply([w, h], [width, height], [0.5, 0.5]);
+
+    return divide(
+      rotate(subtract(vec, viewOffset, viewCenter, position), angle(rotation)),
+      scale
+    );
+  }
+
   render(
     world: IWorld,
     scene: IScene,
@@ -27,9 +54,8 @@ export class OrthographicCamera extends GameObject
 
     for (const gameObject of scene.getActiveObjects()) {
       if (!(gameObject instanceof OrthographicCamera)) {
-        // TODO: calc if the object is in the camera
-        // viewport / renderer working area before
-        // calling `render`
+        // TODO: calc if the object is in the camera viewport / renderer working
+        // area before calling `render`
         world.renderer.draw(() => {
           gameObject.components.transform.adjustRendererContext(world.renderer);
           gameObject.render(world, scene, camera, remainder);

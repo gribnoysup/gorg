@@ -5,3 +5,4 @@ export { OrthographicCamera } from './OrthographicCamera';
 export { TransformComponent } from './TransformComponent';
 export { StateComponent } from './StateComponent';
 export * as VecMath from './VecMath';
+export { InputManager, VirtualAxis } from './InputManager';

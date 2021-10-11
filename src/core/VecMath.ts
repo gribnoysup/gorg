@@ -1,37 +1,29 @@
-export function add(...vectors: Vector2[]): Vector2 {
-  return vectors
-    .slice(1)
-    .reduce(([x0, y0], [x1, y1]) => [x0 + x1, y0 + y1], vectors[0]);
+export function add(vec1: Vector2, ...vectors: Vector2[]): Vector2 {
+  return vectors.reduce(([x0, y0], [x1, y1]) => [x0 + x1, y0 + y1], vec1);
 }
 
 export function addScalar([x, y]: Vector2, n: number): Vector2 {
   return [x + n, y + y];
 }
 
-export function subtract(...vectors: Vector2[]): Vector2 {
-  return vectors
-    .slice(1)
-    .reduce(([x0, y0], [x1, y1]) => [x0 - x1, y0 - y1], vectors[0]);
+export function subtract(vec1: Vector2, ...vectors: Vector2[]): Vector2 {
+  return vectors.reduce(([x0, y0], [x1, y1]) => [x0 - x1, y0 - y1], vec1);
 }
 
 export function subtractScalar([x, y]: Vector2, n: number): Vector2 {
   return [x - n, y - n];
 }
 
-export function multiply(...vectors: Vector2[]): Vector2 {
-  return vectors
-    .slice(1)
-    .reduce(([x0, y0], [x1, y1]) => [x0 * x1, y0 * y1], vectors[0]);
+export function multiply(vec1: Vector2, ...vectors: Vector2[]): Vector2 {
+  return vectors.reduce(([x0, y0], [x1, y1]) => [x0 * x1, y0 * y1], vec1);
 }
 
 export function multiplyScalar([x, y]: Vector2, n: number): Vector2 {
   return [x * n, y * n];
 }
 
-export function divide(...vectors: Vector2[]): Vector2 {
-  return vectors
-    .slice(1)
-    .reduce(([x0, y0], [x1, y1]) => [x0 / x1, y0 / y1], vectors[0]);
+export function divide(vec1: Vector2, ...vectors: Vector2[]): Vector2 {
+  return vectors.reduce(([x0, y0], [x1, y1]) => [x0 / x1, y0 / y1], vec1);
 }
 
 export function divideScalar([x, y]: Vector2, n: number): Vector2 {

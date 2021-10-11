@@ -9,6 +9,7 @@ const {
   OrthographicCamera,
   TransformComponent,
   VecMath,
+  InputManager,
 } = Core;
 
 function floatFix(n, correct = 8) {
@@ -177,7 +178,7 @@ class BackAndForthUpdater {
   }
 }
 
-const rect0 = new GameObject('rect1', {
+const rect0 = new GameObject('rect0', {
   update: [new RotateUpdater(5)],
   render: [new Addons.RectangleRenderComponent(100, 100, null, 'cyan', 3)],
   transform: new TransformComponent({
@@ -185,6 +186,32 @@ const rect0 = new GameObject('rect1', {
     rotation: VecMath.angleDegToVector(45),
     scale: [2, 2],
   }),
+});
+
+class MouseMover {
+  update(world, renderer, gameObject) {
+    if (InputManager.getKey('Mouse0')) {
+      gameObject.components.transform.moveBy(InputManager.getMouseMovement());
+    }
+  }
+}
+
+const sharedTransform = new TransformComponent();
+
+const rect00 = new GameObject('rect00', {
+  transform: sharedTransform,
+  update: [new MouseMover()],
+  render: [new Addons.RectangleRenderComponent(10, 10, 'red')],
+});
+
+const rect01 = new GameObject('rect01', {
+  transform: sharedTransform,
+  render: [new Addons.RectangleRenderComponent(100, 2, 'blue')],
+});
+
+const rect02 = new GameObject('rect02', {
+  transform: sharedTransform,
+  render: [new Addons.RectangleRenderComponent(2, 100, 'green')],
 });
 
 const rect1 = new GameObject('rect1', {
@@ -222,13 +249,13 @@ const cam1 = new OrthographicCamera(
   'cam1',
   {
     transform: new TransformComponent({
-      position: [-10, -45],
+      position: [20, 50],
       rotation: VecMath.angleDegToVector(45),
-      scale: [0.2, 0.2],
+      scale: [0.5, 0.5],
     }),
   },
   { x: 0.6, y: 0.6, w: 0.4, h: 0.4 },
-  'black'
+  'cyan'
 );
 
 const sprite = new Addons.Sprite(
@@ -256,6 +283,9 @@ const bat = new GameObject('bat', {
 const scene = new Scene('main', [
   cam0,
   cam1,
+  rect01,
+  rect02,
+  rect00,
   rect0,
   spline1,
   rect1,
@@ -266,7 +296,7 @@ const scene = new Scene('main', [
   bat,
 ]);
 
-const world = new World([scene], 60, 640, 480);
+const world = new World([scene], 30, 640, 480);
 
 window.world = world;
 
@@ -277,3 +307,27 @@ window.splines = { line };
 world.renderer.appendTo(document.querySelector('#root'));
 
 world.start('main');
+
+const debug = document.getElementById('debug');
+const updateDebug = () => {
+  debug.innerHTML = `<pre>${JSON.stringify(
+    {
+      ...world.timestamps,
+      deltaTime: world.deltaTime,
+      buttons: Array.from(InputManager.getKeys()),
+      mouse: InputManager.getMousePosition(world),
+      mouseMovement: InputManager.getMouseMovement(world),
+      project: cam0.projectWorldToCamera(
+        world,
+        InputManager.getMousePosition(world)
+      ),
+      project1: cam1.projectWorldToCamera(
+        world,
+        InputManager.getMousePosition(world)
+      ),
+    },
+    null,
+    2
+  )}</pre>`;
+};
+world.addEventListener('update', updateDebug);

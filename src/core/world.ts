@@ -1,6 +1,6 @@
 import { now } from '../utils';
-
-import { add, multiply, subtract, angle } from './VecMath';
+import { InputManager } from './InputManager';
+import { add, multiply, angle, divideScalar, rotate } from './VecMath';
 
 export class Canvas2DRenderer implements ICanvas2DRenderer {
   view: HTMLCanvasElement;
@@ -78,24 +78,20 @@ export class Canvas2DRenderer implements ICanvas2DRenderer {
   private adjustContextToCamera() {
     if (this.currentCamera == null) return;
 
-    const {
-      position,
-      rotation,
-      scale,
-    } = this.currentCamera.components.transform;
+    const { position, rotation, scale } =
+      this.currentCamera.components.transform;
 
     const { x, y, w, h } = this.getPixelsRectInViewport(
       this.currentCamera.viewportRect
     );
 
-    const offset: Vector2 = [x, y];
-    const middle: Vector2 = [w / 2, h / 2];
+    const center = add(divideScalar([w, h], 2), [x, y]);
+    const rot = angle(rotation);
+    const xAxis = multiply(rotate([1, 0], rot), scale);
+    const yAxis = multiply(rotate([0, 1], rot), scale);
+    const origin = add(position, center);
 
-    const translate = subtract(add(offset, middle), multiply(position, scale));
-
-    this.context.translate(...translate);
-    this.context.rotate(angle(rotation));
-    this.context.scale(...scale);
+    this.context.setTransform(...xAxis, ...yAxis, ...origin);
   }
 
   draw(callback = () => {}) {
@@ -149,7 +145,7 @@ export class RuntimeFrameTimestamps implements IRuntimeFrameTimestamps {
   }
 }
 
-export class World implements IWorld {
+export class World extends EventTarget implements IWorld {
   private scenes: Map<string, IScene>;
   private deltaTime: number;
   private activeScene: string | null;
@@ -163,6 +159,7 @@ export class World implements IWorld {
     width: number = 320,
     height: number = 240
   ) {
+    super();
     this.scenes = new Map(
       scenes.map<[string, IScene]>((scene) => [scene.name, scene])
     );
@@ -211,7 +208,7 @@ export class World implements IWorld {
       this.update();
     } catch (error) {
       this.stop();
-      console.error(error);
+      throw error;
     }
   }
 
@@ -229,12 +226,23 @@ export class World implements IWorld {
     t.previousUpdateTime = t.currentUpdateTime;
     t.updateLag += t.elapsedUpdateTime;
 
+    super.dispatchEvent(
+      new CustomEvent('beforeupdate', { detail: { ...t, deltaTime } })
+    );
+
     while (t.updateLag >= deltaTime) {
+      super.dispatchEvent(
+        new CustomEvent('update', { detail: { ...t, deltaTime } })
+      );
+      InputManager.update(deltaTime);
       scene.update(this, deltaTime);
+      InputManager.flush();
       t.updateLag -= deltaTime;
     }
 
-    scene.render(this, t.updateLag / deltaTime);
+    const remainder = t.updateLag / deltaTime;
+    super.dispatchEvent(new CustomEvent('render', { detail: remainder }));
+    scene.render(this, remainder);
   }
 
   stop() {
