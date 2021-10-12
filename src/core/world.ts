@@ -185,6 +185,8 @@ export class World extends EventTarget implements IWorld {
   setActiveScene(sceneName: string) {
     if (this.scenes.has(sceneName)) {
       this.activeScene = sceneName;
+      // We just checked that it exists
+      this.scenes.get(sceneName)!.init(this);
     } else {
       throw new Error(`Scene ${sceneName} is not available in runtime`);
     }

@@ -10,6 +10,7 @@ const {
   TransformComponent,
   VecMath,
   InputManager,
+  CircleCollider2D,
 } = Core;
 
 function floatFix(n, correct = 8) {
@@ -111,13 +112,16 @@ class SplineRenderer {
 }
 
 class SplineMover {
-  constructor(spline, startPosition = 0, byDistance = true) {
+  constructor(spline, startPosition = 0, byDistance = true, speed = 1) {
     this.spline = spline;
     this.position = startPosition;
     this.byDistance = byDistance;
+    this.speed = speed;
   }
 
   update(world, scene, gameObject, deltaTime) {
+    console.log(deltaTime);
+
     const t = this.byDistance
       ? this.spline.getTForDistance(this.position)
       : this.position;
@@ -128,7 +132,9 @@ class SplineMover {
     gameObject.components.transform.moveTo(position);
     gameObject.components.transform.rotateToVector(rotation);
 
-    const step = this.byDistance ? 20 / deltaTime : 1 / deltaTime;
+    const step = this.byDistance
+      ? (20 * this.speed) / deltaTime
+      : this.speed / deltaTime;
 
     this.position += step;
   }
@@ -188,19 +194,10 @@ const rect0 = new GameObject('rect0', {
   }),
 });
 
-class MouseMover {
-  update(world, renderer, gameObject) {
-    if (InputManager.getKey('Mouse0')) {
-      gameObject.components.transform.moveBy(InputManager.getMouseMovement());
-    }
-  }
-}
-
 const sharedTransform = new TransformComponent();
 
 const rect00 = new GameObject('rect00', {
   transform: sharedTransform,
-  update: [new MouseMover()],
   render: [new Addons.RectangleRenderComponent(10, 10, 'red')],
 });
 
@@ -267,6 +264,87 @@ const sprite = new Addons.Sprite(
   32
 );
 
+class MouseMover {
+  #syncGameObjectWithMousePosition(world, scene, gameObject) {
+    const cam0 = scene.gameObjects.find((obj) => obj.name === 'cam0');
+    gameObject.components.transform.moveTo(
+      cam0.projectWorldToCamera(world, InputManager.getMousePosition(world))
+    );
+  }
+  init(world, scene, gameObject) {
+    this.#syncGameObjectWithMousePosition(world, scene, gameObject);
+  }
+  update(world, scene, gameObject) {
+    this.#syncGameObjectWithMousePosition(world, scene, gameObject);
+  }
+}
+
+const mouseCursor = new Addons.Sprite(
+  './cursor.png',
+  Addons.Sprite.SpriteMode.Sprite
+);
+
+const mouse = new GameObject('mouse', {
+  update: [new MouseMover()],
+  render: [
+    new Addons.SpriteRenderComponent({ sprite: mouseCursor, pivot: 'TopLeft' }),
+  ],
+  collider: new CircleCollider2D([0, 0], 5),
+});
+
+const growingCircle = new GameObject('circle', {
+  update: [
+    function (world, scene, gameObject, deltaTime) {
+      let radius = gameObject.components.state.get('radius');
+
+      if (!radius) {
+        radius = 10;
+        gameObject.components.state.set('radius', radius);
+      }
+
+      if (
+        gameObject.components.collider.collidesWith(mouse.components.collider)
+      ) {
+        gameObject.components.state.set('fillStyle', 'red');
+        const delta = 0.1 * deltaTime;
+        if (InputManager.getKey('AltLeft+Mouse0')) {
+          gameObject.components.state.set(
+            'radius',
+            Math.min(300, radius + delta)
+          );
+          gameObject.components.collider.radius =
+            gameObject.components.state.get('radius');
+        } else if (InputManager.getKey('ShiftLeft+Mouse0')) {
+          gameObject.components.state.set(
+            'radius',
+            Math.max(10, radius - delta)
+          );
+          gameObject.components.collider.radius =
+            gameObject.components.state.get('radius');
+        } else if (InputManager.getKey('Mouse0')) {
+          gameObject.components.transform.moveBy(
+            InputManager.getMouseMovement()
+          );
+        }
+      } else {
+        gameObject.components.state.set('fillStyle', 'yellow');
+      }
+    },
+  ],
+  render: [
+    function (world, scene, gameObject, camera) {
+      const ctx = world.renderer.context;
+      const radius = gameObject.components.state.get('radius');
+      const fillStyle = gameObject.components.state.get('fillStyle');
+      ctx.beginPath();
+      ctx.fillStyle = fillStyle ?? 'yellow';
+      ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+      ctx.fill();
+    },
+  ],
+  collider: new CircleCollider2D([0, 0, 10]),
+});
+
 const spline = new GameObject('spline', {
   render: [new SplineRenderer(hello)],
 });
@@ -276,27 +354,37 @@ const spline1 = new GameObject('spline1', {
 });
 
 const bat = new GameObject('bat', {
-  render: [new Addons.SpriteRenderComponent(sprite, 64, 64, [0, 1], 15)],
+  render: [
+    new Addons.SpriteRenderComponent({
+      sprite,
+      drawingWidth: 64,
+      drawingHeight: 64,
+      animationFrames: [0, 1],
+      animationSpeed: 15,
+    }),
+  ],
   update: [new SplineMover(hello, 0)],
 });
 
 const scene = new Scene('main', [
   cam0,
   cam1,
-  rect01,
-  rect02,
-  rect00,
-  rect0,
+  growingCircle,
+  // rect01,
+  // rect02,
+  // rect00,
+  // rect0,
   spline1,
   rect1,
   rect1_1,
-  rect2,
-  rect3,
+  // rect2,
+  // rect3,
   spline,
   bat,
+  mouse,
 ]);
 
-const world = new World([scene], 30, 640, 480);
+const world = new World([scene], 60, 640, 480);
 
 window.world = world;
 

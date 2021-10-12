@@ -19,27 +19,28 @@ export class GameObject implements IGameObject {
   }
 
   init(world: IWorld, scene: IScene) {
-    if (this.components.state.init) {
-      this.components.state.init(world, scene, this);
-    }
-    if (this.components.transform.init) {
-      this.components.transform.init(world, scene, this);
-    }
+    this.components.state.init?.(world, scene, this);
+    this.components.transform.init?.(world, scene, this);
+    this.components.collider?.init?.(world, scene, this);
     this.components.update.forEach((component) => {
-      if (component.init) {
-        component.init(world, scene, this);
+      if (typeof component !== 'function') {
+        component.init?.(world, scene, this);
       }
     });
     this.components.render.forEach((component) => {
-      if (component.init) {
-        component.init(world, scene, this);
+      if (typeof component !== 'function') {
+        component.init?.(world, scene, this);
       }
     });
   }
 
   update(world: IWorld, scene: IScene, deltaTime: number) {
     this.components.update.forEach((updateComponent) => {
-      updateComponent.update(world, scene, this, deltaTime);
+      if (typeof updateComponent !== 'function') {
+        updateComponent.update(world, scene, this, deltaTime);
+      } else {
+        updateComponent(world, scene, this, deltaTime);
+      }
     });
   }
 
@@ -50,7 +51,11 @@ export class GameObject implements IGameObject {
     remainder: number
   ) {
     this.components.render.forEach((renderComponent) => {
-      renderComponent.render(world, scene, this, camera, remainder);
+      if (typeof renderComponent !== 'function') {
+        renderComponent.render(world, scene, this, camera, remainder);
+      } else {
+        renderComponent(world, scene, this, camera, remainder);
+      }
     });
   }
 }

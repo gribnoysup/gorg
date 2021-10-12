@@ -20,20 +20,22 @@ export class RectangleRenderComponent implements IRenderComponent {
   }
 
   render(world: IWorld) {
-    const { renderer } = world;
+    const {
+      renderer: { context: ctx },
+    } = world;
 
     const centerX = this.width / 2;
     const centerY = this.height / 2;
 
     if (this.fillStyle) {
-      renderer.context.fillStyle = this.fillStyle;
-      renderer.context.fillRect(-centerX, -centerY, this.width, this.height);
+      ctx.fillStyle = this.fillStyle;
+      ctx.fillRect(-centerX, -centerY, this.width, this.height);
     }
 
     if (this.strokeStyle) {
-      renderer.context.lineWidth = this.lineWidth;
-      renderer.context.strokeStyle = this.strokeStyle;
-      renderer.context.strokeRect(-centerX, -centerY, this.width, this.height);
+      ctx.lineWidth = this.lineWidth;
+      ctx.strokeStyle = this.strokeStyle;
+      ctx.strokeRect(-centerX, -centerY, this.width, this.height);
     }
   }
 }

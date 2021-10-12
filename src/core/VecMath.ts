@@ -103,3 +103,17 @@ export function lerp(v0: Vector2, v1: Vector2, t: number): Vector2 {
 }
 
 export const mix = lerp;
+
+function ident(val: any): typeof val {
+  return val;
+}
+
+export function equal(
+  [x1, y1]: Vector2,
+  [x2, y2]: Vector2,
+  normalize = ident
+): boolean {
+  return normalize(x1) === normalize(y1) && normalize(x2) === normalize(y2);
+}
+
+export const eq = equal;

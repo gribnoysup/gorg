@@ -11,6 +11,10 @@ interface IComponent {
   init?: (world: IWorld, scene: IScene, gameObject: IGameObject) => void;
 }
 
+declare interface IColliderComponent extends IComponent {
+  collidesWith(collider: IColliderComponent): boolean;
+}
+
 declare interface IStateComponent<K = unknown, V = unknown> extends IComponent {
   get(key: K): V | undefined;
   set(key: K, value: V): IStateComponent<K, V>;
@@ -23,30 +27,35 @@ declare interface ITransformComponent extends IComponent {
   adjustRendererContext(renderer: ICanvas2DRenderer): void;
 }
 
+declare type RenderFunction = (
+  world: IWorld,
+  scene: IScene,
+  gameObject: IGameObject,
+  camera: IOrthographicCamera,
+  remainder: number
+) => void;
+
 declare interface IRenderComponent extends IComponent {
-  render(
-    world: IWorld,
-    scene: IScene,
-    gameObject: IGameObject,
-    camera: IOrthographicCamera,
-    remainder: number
-  ): void;
+  render: RenderFunction;
 }
 
+declare type UpdateFunction = (
+  world: IWorld,
+  scene: IScene,
+  gameObject: IGameObject,
+  deltaTime: number
+) => void;
+
 declare interface IUpdateComponent extends IComponent {
-  update(
-    world: IWorld,
-    scene: IScene,
-    gameObject: IGameObject,
-    deltaTime: number
-  ): void;
+  update: UpdateFunction;
 }
 
 declare type GameObjectComponents = {
   state: IStateComponent;
   transform: ITransformComponent;
-  update: IUpdateComponent[];
-  render: IRenderComponent[];
+  collider?: IColliderComponent;
+  update: (IUpdateComponent | UpdateFunction)[];
+  render: (IRenderComponent | RenderFunction)[];
 };
 
 declare interface IGameObject {
